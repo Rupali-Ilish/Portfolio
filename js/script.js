@@ -1,0 +1,1 @@
+console.log("Portfolio Javascript file is linked successfully.");
