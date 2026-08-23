@@ -9,32 +9,76 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
 
     <link rel="stylesheet" href="css/style.css" />
+
+    <!-- to run this code jate dark save rakhle dark pai -->
+    <script>
+      (function () {
+        let saved = localStorage.getItem("portfolio-theme");
+        let prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+        if (saved === "dark" || (!saved && prefersDark)) {
+          document.documentElement.classList.add("dark-theme");
+        }
+      })();
+    </script>
   </head>
 
   <body>
+    <!-- keyboard diye tipte parbo -->
+    <a class="skip-link" href="#main">Go to main content</a>
+
     <header class="editor-topbar">
       <!-- Navigation -->
       <div class="topbar-left">
-        <div class="traffic-dots">
+        <span class="traffic-dots" aria-hidden="true">
           <span></span>
           <span></span>
           <span></span>
-        </div>
+        </span>
+        <span class="file-label">rupali@portfolio</span>
       </div>
 
-      <nav class="editor-tabs">
-        <a href="#home" class="editor-tab active">hero.js</a>
-        <a href="#about" class="editor-tab">about.md</a>
-        <a href="#skills" class="editor-tab">skills.json</a>
-        <a href="#journey" class="editor-tab">journey.log</a>
-        <a href="#projects" class="editor-tab">projects</a>
-        <a href="#achievements" class="editor-tab">achievements.yml</a>
-        <a href="#contact" class="editor-tab">contact</a>
+      <nav class="tab-nav" aria-label="Primary">
+        <ul>
+          <li>
+            <a href="#home" class="tab-link" data-section="home">hero.js</a>
+          </li>
+          <li>
+            <a href="#about" class="tab-link" data-section="about">about.md</a>
+          </li>
+          <li>
+            <a href="#skills" class="tab-link" data-section="skills"
+              >skills.json</a
+            >
+          </li>
+          <li>
+            <a href="#journey" class="tab-link" data-section="journey"
+              >journey.log</a
+            >
+          </li>
+          <li>
+            <a href="#projects" class="tab-link" data-section="projects"
+              >projects</a
+            >
+          </li>
+          <li>
+            <a href="#achievements" class="tab-link" data-section="achievements"
+              >achievements.yml</a
+            >
+          </li>
+          <li>
+            <a href="#contact" class="tab-link" data-section="contact"
+              >contact</a
+            >
+          </li>
+        </ul>
       </nav>
 
       <div class="topbar-right">
@@ -42,18 +86,805 @@
           id="themeToggle"
           class="theme-toggle"
           type="button"
-          aria-label="Toggle dark mode"
+          aria-label="Switch to dark theme"
+          aria-pressed="false"
         >
-          ◐
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-sun-icon lucide-sun"
+          >
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2" />
+            <path d="M12 20v2" />
+            <path d="m4.93 4.93 1.41 1.41" />
+            <path d="m17.66 17.66 1.41 1.41" />
+            <path d="M2 12h2" />
+            <path d="M20 12h2" />
+            <path d="m6.34 17.66-1.41 1.41" />
+            <path d="m19.07 4.93-1.41 1.41" />
+          </svg>
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-moon-icon lucide-moon"
+          >
+            <path
+              d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"
+            />
+          </svg>
+        </button>
+
+        <button
+          id="menuToggle"
+          class="menu-toggle"
+          type="button"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobileMenu"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
       </div>
     </header>
-    <main>
+
+    <!-- Mobile er jonno navigation bar -->
+    <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+      <ul>
+        <li>
+          <a href="#home" class="mobile-link" data-section="home"
+            >01 · hero.js</a
+          >
+        </li>
+        <li>
+          <a href="#about" class="mobile-link" data-section="about"
+            >02 · about.md</a
+          >
+        </li>
+        <li>
+          <a href="#skills" class="mobile-link" data-section="skills"
+            >03 · skills.json</a
+          >
+        </li>
+        <li>
+          <a href="#journey" class="mobile-link" data-section="journey"
+            >04 · journey.log</a
+          >
+        </li>
+        <li>
+          <a href="#projects" class="mobile-link" data-section="projects"
+            >05 · projects/</a
+          >
+        </li>
+        <li>
+          <a
+            href="#achievements"
+            class="mobile-link"
+            data-section="achievements"
+            >06 · achievements.yml</a
+          >
+        </li>
+        <li>
+          <a href="#contact" class="mobile-link" data-section="contact"
+            >07 · contact</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Decorative code-editor line-number rail (desktop only, purely visual) -->
+    <!-- just shajanor jonno, cause i want vs code style -->
+    <div class="line-gutter" id="lineGutter" aria-hidden="true"></div>
+
+    <main id="main">
       <!-- Hero, About, Skills, Journey, Projects, Achievements, Contact -->
+
+      <!-- Hero section -->
+      <section id="home" class="section hero-section" aria-label="Introduction">
+        <div class="container hero-grid">
+          <div class="hero-content reveal">
+            <p class="eyebrow">// 01. hero.js</p>
+
+            <div class="terminal-window">
+              <div class="terminal-titlebar">
+                <span class="traffic-dots" aria-hidden="true">
+                  <span></span><span></span><span></span>
+                </span>
+                <span class="terminal-tab">hero.js</span>
+              </div>
+              <div class="terminal-body">
+                <p class="code-line">
+                  <span class="code-comment">// initializing profile...</span>
+                </p>
+                <p class="code-line">
+                  <span class="code-keyword">const</span>
+                  <span class="code-var">developer</span> = {
+                </p>
+                <p class="code-line code-indent">
+                  name: <span class="code-string">"Afia Jahin Rupali"</span>,
+                </p>
+                <p class="code-line code-indent">
+                  role:
+                  <span class="code-string"
+                    ><span id="roleText">CSE Student</span
+                    ><span class="type-cursor" aria-hidden="true"></span></span
+                  >,
+                </p>
+                <p class="code-line code-indent">
+                  status:
+                  <span class="code-string code-accent">"Accepted"</span>
+                </p>
+                <p class="code-line">};</p>
+              </div>
+            </div>
+
+            <h1 class="hero-heading">
+              Hello, World.<br />I build things that
+              <span class="accent-underline">solve problems.</span>
+            </h1>
+
+            <p class="hero-lede">
+              I'm a Computer Science &amp; Engineering student who spends most
+              nights somewhere between a judge's verdict and a half-finished
+              side project — chasing clean solutions, one submission at a time.
+            </p>
+
+            <div class="hero-actions">
+              <a href="#projects" class="btn btn-primary">Explore My Work</a>
+              <a href="#contact" class="btn btn-ghost">Contact Me</a>
+            </div>
+          </div>
+
+          <div class="hero-visual reveal">
+            <div class="profile-frame">
+              <img
+                src="assets/images/mypic.jpg"
+                alt="Portrait of Afia Jahin Rupali"
+                class="profile-image"
+                id="profileImage"
+                width="400"
+                height="400"
+              />
+              <span class="badge-verdict"
+                ><span class="verdict-dot" aria-hidden="true"></span>Status:
+                Accepted</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section id="about" class="section" aria-label="About me">
+        <div class="container">
+          <p class="eyebrow reveal">// 02. about.md</p>
+          <h2 class="section-heading reveal">About Me</h2>
+
+          <div class="about-grid">
+            <div class="about-intro reveal">
+              <p>
+                I started out solving small logic puzzles for fun and slowly
+                turned that habit into a discipline — reading a problem
+                carefully, breaking it down, and refusing to stop until the
+                judge says "Accepted." That same mindset now shapes how I
+                approach software: understand the problem fully before writing a
+                single line of code.
+              </p>
+              <p>
+                Outside of contests, I build small full-stack projects to stay
+                close to how real products are actually shipped — from the
+                interface someone sees, down to the code that keeps it running.
+              </p>
+            </div>
+
+            <ul class="fact-grid reveal" aria-label="Quick facts">
+              <li class="fact-card">
+                <span class="fact-icon" aria-hidden="true">🎓</span
+                ><span>CSE Student</span>
+              </li>
+              <li class="fact-card">
+                <span class="fact-icon" aria-hidden="true">💻</span
+                ><span>Competitive Programmer</span>
+              </li>
+              <li class="fact-card">
+                <span class="fact-icon" aria-hidden="true">🧠</span
+                ><span>Problem Solver</span>
+              </li>
+              <li class="fact-card">
+                <span class="fact-icon" aria-hidden="true">🏆</span
+                ><span>ICPC Participant</span>
+              </li>
+              <li class="fact-card">
+                <span class="fact-icon" aria-hidden="true">🚀</span
+                ><span>Future Software Engineer</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="about-details">
+            <div class="detail-card reveal">
+              <h3>Education</h3>
+              <!-- EDIT: replace with your institution and details -->
+              <p class="detail-title">
+                B.Sc. in Computer Science &amp; Engineering
+              </p>
+              <p class="detail-sub">
+                Currently pursuing my undergraduate degree in Jahangirnagar
+                University, Bangladesh. Expected graduation: 2028.
+              </p>
+            </div>
+            <div class="detail-card reveal">
+              <h3>Interests</h3>
+              <p class="detail-sub">
+                Competitive programming, algorithm design, full-stack web
+                development, system design, open-source, and anything that
+                involves a genuinely hard problem.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section id="skills" class="section" aria-label="Skills">
+        <div class="container">
+          <p class="eyebrow reveal">// 03. skills.json</p>
+          <h2 class="section-heading reveal">Skills &amp; Tools</h2>
+          <p class="section-sub reveal">
+            Organized the way I'd organize an actual config file — by category,
+            not by made-up percentages.
+          </p>
+
+          <!-- TAB BUTTONS -->
+          <div
+            class="skills-tabs reveal"
+            role="tablist"
+            aria-label="Skill categories"
+          >
+            <button
+              class="skill-tab-btn active"
+              role="tab"
+              id="tab-all"
+              aria-selected="true"
+              data-tab="all"
+            >
+              All
+            </button>
+            <button
+              class="skill-tab-btn"
+              role="tab"
+              id="tab-programming"
+              aria-controls="panel-programming"
+              aria-selected="false"
+              data-tab="programming"
+            >
+              Programming
+            </button>
+            <button
+              class="skill-tab-btn"
+              role="tab"
+              id="tab-webdev"
+              aria-controls="panel-webdev"
+              aria-selected="false"
+              data-tab="webdev"
+            >
+              Web Development
+            </button>
+            <button
+              class="skill-tab-btn"
+              role="tab"
+              id="tab-tools"
+              aria-controls="panel-tools"
+              aria-selected="false"
+              data-tab="tools"
+            >
+              Tools
+            </button>
+          </div>
+
+          <!-- TAB PANELS -->
+          <div class="skills-panels reveal">
+            <ul
+              class="skill-list"
+              id="panel-programming"
+              role="tabpanel"
+              aria-labelledby="tab-programming"
+            >
+              <li class="skill-tag">C++</li>
+              <li class="skill-tag">C</li>
+              <li class="skill-tag">JavaScript</li>
+              <li class="skill-tag">Python</li>
+              <li class="skill-tag">Java</li>
+              <li class="skill-tag">GDScript</li>
+            </ul>
+            <ul
+              class="skill-list"
+              id="panel-webdev"
+              role="tabpanel"
+              aria-labelledby="tab-webdev"
+            >
+              <li class="skill-tag">HTML</li>
+              <li class="skill-tag">CSS</li>
+              <li class="skill-tag">JavaScript</li>
+              <li class="skill-tag">React</li>
+            </ul>
+            <ul
+              class="skill-list"
+              id="panel-tools"
+              role="tabpanel"
+              aria-labelledby="tab-tools"
+            >
+              <li class="skill-tag">Git</li>
+              <li class="skill-tag">GitHub</li>
+              <li class="skill-tag">Docker</li>
+              <li class="skill-tag">VS Code</li>
+              <li class="skill-tag">Microsoft Office</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Journey -->
+      <section id="journey" class="section" aria-label="Developer journey">
+        <div class="container">
+          <p class="eyebrow reveal">// 04 journey.log</p>
+          <h2 class="section-heading reveal">Developer Journey</h2>
+          <p class="section-sub reveal">
+            A running log, roughly in the order it happened. Verdicts included.
+          </p>
+
+          <ul class="timeline">
+            <li class="timeline-item reveal">
+              <span class="timeline-verdict">Accepted</span>
+              <h3>Started learning programming</h3>
+              <p>
+                Wrote my first lines of code and got hooked on the feeling of a
+                program finally doing what I meant it to do.
+              </p>
+            </li>
+            <li class="timeline-item reveal">
+              <span class="timeline-verdict">Accepted</span>
+              <h3>Started competitive programming</h3>
+              <p>
+                Moved from tutorials to timed problems — and started actually
+                enjoying the pressure. My cp journey began with Codeforces and
+                AtCoder, and I haven't looked back.
+              </p>
+            </li>
+            <li class="timeline-item reveal">
+              <span class="timeline-verdict">Accepted</span>
+              <h3>Solved thousands of problems</h3>
+              <p>
+                Built a steady practice habit across online judges, focusing on
+                data structures and algorithmic thinking.
+              </p>
+            </li>
+            <li class="timeline-item reveal">
+              <span class="timeline-verdict">Accepted</span>
+              <h3>Competed in programming contests</h3>
+              <p>
+                Started entering contests regularly, learning as much from wrong
+                answers as accepted ones.
+              </p>
+            </li>
+            <li class="timeline-item reveal">
+              <span class="timeline-verdict">Accepted</span>
+              <h3>ICPC Asia Dhaka Regional Contest 2024 & 2025</h3>
+              <p>
+                Represented my team at the regional stage, one of the most
+                demanding and rewarding contests I've taken part in.
+              </p>
+            </li>
+            <li class="timeline-item reveal">
+              <span class="timeline-verdict">Accepted</span>
+              <h3>IEEE Xtreme</h3>
+              <p>
+                Took part in the 24-hour global programming challenge, solving
+                problems against the clock alongside teammates.
+              </p>
+            </li>
+            <li class="timeline-item reveal">
+              <span class="timeline-verdict">Accepted</span>
+              <h3>Started building full-stack projects</h3>
+              <p>
+                Branched out from pure problem-solving into building complete,
+                usable web applications.
+              </p>
+            </li>
+            <li class="timeline-item reveal">
+              <span class="timeline-verdict timeline-verdict-pending"
+                >In Progress</span
+              >
+              <h3>Currently: deepening system design</h3>
+              <p>
+                Working on understanding how the systems behind the problems are
+                actually designed and scaled.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Projects -->
+      <section id="projects" class="section" aria-label="Projects">
+        <div class="container">
+          <p class="eyebrow reveal">// 05 projects/</p>
+          <h2 class="section-heading reveal">Projects</h2>
+          <p class="section-sub reveal">
+            A mix of practice builds and full-stack work.
+          </p>
+
+          <div
+            class="project-filters reveal"
+            role="group"
+            aria-label="Filter projects"
+          >
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="web">
+              Web Development
+            </button>
+            <button class="filter-btn" data-filter="javascript">
+              JavaScript
+            </button>
+            <button class="filter-btn" data-filter="fullstack">
+              Full Stack
+            </button>
+            <button class="filter-btn" data-filter="other">Other</button>
+          </div>
+
+          <div class="project-grid" id="projectGrid">
+            <!-- PLACEHOLDER PROJECT — replace title, description, tech list, and links with a real project -->
+            <article class="project-card reveal" data-category="web javascript">
+              <div class="project-thumb">
+                <span class="thumb-tag">algo-visualizer/</span>
+              </div>
+              <div class="project-body">
+                <h3>Algorithm Visualizer</h3>
+                <p>
+                  An interactive tool for stepping through sorting and
+                  pathfinding algorithms — replace with your real project
+                  summary.
+                </p>
+                <ul class="tech-tags">
+                  <li>HTML</li>
+                  <li>CSS</li>
+                  <li>JavaScript</li>
+                </ul>
+                <div class="project-links">
+                  <a href="#" class="btn btn-small btn-ghost">GitHub</a>
+                  <a href="#" class="btn btn-small btn-primary">Live Demo</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- PLACEHOLDER PROJECT — replace title, description, tech list, and links with a real project -->
+            <article class="project-card reveal" data-category="fullstack web">
+              <div class="project-thumb">
+                <span class="thumb-tag">cp-tracker/</span>
+              </div>
+              <div class="project-body">
+                <h3>Competitive Programming Tracker</h3>
+                <p>
+                  A dashboard for logging solved problems and contest history
+                  across judges — replace with your real project summary.
+                </p>
+                <ul class="tech-tags">
+                  <li>React</li>
+                  <li>Node.js</li>
+                  <li>REST API</li>
+                </ul>
+                <div class="project-links">
+                  <a href="#" class="btn btn-small btn-ghost">GitHub</a>
+                  <a href="#" class="btn btn-small btn-primary">Live Demo</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- PLACEHOLDER PROJECT — replace title, description, tech list, and links with a real project -->
+            <article class="project-card reveal" data-category="web">
+              <div class="project-thumb">
+                <span class="thumb-tag">task-manager/</span>
+              </div>
+              <div class="project-body">
+                <h3>Task Manager App</h3>
+                <p>
+                  A clean, responsive task board with local persistence —
+                  replace with your real project summary.
+                </p>
+                <ul class="tech-tags">
+                  <li>HTML</li>
+                  <li>CSS</li>
+                  <li>JavaScript</li>
+                </ul>
+                <div class="project-links">
+                  <a href="#" class="btn btn-small btn-ghost">GitHub</a>
+                  <a href="#" class="btn btn-small btn-primary">Live Demo</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- PLACEHOLDER PROJECT — replace title, description, tech list, and links with a real project -->
+            <article class="project-card reveal" data-category="javascript">
+              <div class="project-thumb">
+                <span class="thumb-tag">weather-dash/</span>
+              </div>
+              <div class="project-body">
+                <h3>Weather Dashboard</h3>
+                <p>
+                  A weather lookup app consuming a public API with graceful
+                  error states — replace with your real project summary.
+                </p>
+                <ul class="tech-tags">
+                  <li>JavaScript</li>
+                  <li>Fetch API</li>
+                </ul>
+                <div class="project-links">
+                  <a href="#" class="btn btn-small btn-ghost">GitHub</a>
+                  <a href="#" class="btn btn-small btn-primary">Live Demo</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- PLACEHOLDER PROJECT — replace title, description, tech list, and links with a real project -->
+            <article class="project-card reveal" data-category="web fullstack">
+              <div class="project-thumb">
+                <span class="thumb-tag">shop-ui/</span>
+              </div>
+              <div class="project-body">
+                <h3>E-Commerce UI Concept</h3>
+                <p>
+                  A product listing and cart flow focused on layout and
+                  interaction detail — replace with your real project summary.
+                </p>
+                <ul class="tech-tags">
+                  <li>HTML</li>
+                  <li>CSS</li>
+                  <li>JavaScript</li>
+                </ul>
+                <div class="project-links">
+                  <a href="#" class="btn btn-small btn-ghost">GitHub</a>
+                  <a href="#" class="btn btn-small btn-primary">Live Demo</a>
+                </div>
+              </div>
+            </article>
+
+            <!-- PLACEHOLDER PROJECT — replace title, description, tech list, and links with a real project -->
+            <article
+              class="project-card reveal"
+              data-category="other fullstack"
+            >
+              <div class="project-thumb">
+                <span class="thumb-tag">discuss-api/</span>
+              </div>
+              <div class="project-body">
+                <h3>Discussion Board API</h3>
+                <p>
+                  A backend service with authentication and threaded comments —
+                  replace with your real project summary.
+                </p>
+                <ul class="tech-tags">
+                  <li>Node.js</li>
+                  <li>Docker</li>
+                </ul>
+                <div class="project-links">
+                  <a href="#" class="btn btn-small btn-ghost">GitHub</a>
+                  <a href="#" class="btn btn-small btn-primary">Live Demo</a>
+                </div>
+              </div>
+            </article>
+          </div>
+          <p class="filter-empty" id="filterEmpty" hidden>
+            No projects in this category yet.
+          </p>
+        </div>
+      </section>
+
+      <!-- Achievements -->
+      <section id="achievements" class="section" aria-label="Achievements">
+        <div class="container">
+          <p class="eyebrow reveal">// 06. achievements.yml</p>
+          <h2 class="section-heading reveal">Achievements</h2>
+
+          <div class="achievement-grid">
+            <div class="achievement-card reveal counter-card">
+              <span
+                class="achievement-number"
+                data-target="1000"
+                data-suffix="+"
+                >0</span
+              >
+              <span class="achievement-label">Problems Solved</span>
+            </div>
+            <div class="achievement-card reveal">
+              <span class="achievement-badge">ICPC - 01</span>
+              <span class="achievement-label"
+                >Asia Dhaka Regional 2024 — Participant</span
+              >
+            </div>
+            <div class="achievement-card reveal">
+              <span class="achievement-badge">ICPC - 02</span>
+              <span class="achievement-label"
+                >Asia Dhaka Regional 2025 — Participant</span
+              >
+            </div>
+            <div class="achievement-card reveal">
+              <span class="achievement-badge">IEEE Xtreme</span>
+              <span class="achievement-label">Participant with Rank 17th</span>
+            </div>
+            <div class="achievement-card reveal">
+              <span class="achievement-badge">IUPC</span>
+              <span class="achievement-label">AUST IUPC with Rank 33rd</span>
+            </div>
+            <div class="achievement-card reveal counter-card">
+              <span class="achievement-number" data-target="100" data-suffix="+"
+                >0</span
+              >
+              <span class="achievement-label">Online Contests Entered</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- currently learning -->
+      <section
+        id="currently-learning"
+        class="section section-tight"
+        aria-label="Currently learning"
+      >
+        <div class="container">
+          <p class="eyebrow reveal">// 07. now.txt</p>
+          <h2 class="section-heading reveal">Currently Exploring</h2>
+          <ul class="learning-tags reveal">
+            <li>Algorithms</li>
+            <li>System Design</li>
+            <li>Web Development</li>
+            <li>Cloud</li>
+            <li>Docker</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Contact -->
+      <section id="contact" class="section" aria-label="Contact">
+        <div class="container contact-grid">
+          <div class="contact-intro reveal">
+            <p class="eyebrow">// 08 contact.sh</p>
+            <h2 class="section-heading">Send Me a Message</h2>
+            <p>
+              Have a project, a contest team, or just want to talk algorithms?
+              My inbox is open.
+            </p>
+
+            <ul class="social-links" aria-label="Social links">
+              <!-- EDIT: replace href="#" with your real profile URLs -->
+              <li><a href="https://github.com/Rupali-Ilish" target="_blank">GitHub</a></li>
+              <li>
+                <a href="https://www.linkedin.com/in/afia-jahin-rupali/" target="_blank"
+                  >LinkedIn</a
+                >
+              </li>
+              <li>
+                <a href="https://codeforces.com/profile/Rupali_Ilish" target="_blank"
+                  >Codeforces</a
+                >
+              </li>
+              <li><a href="mailto:afiajahinrupali@gmail.com" target="_blank">Email</a></li>
+            </ul>
+          </div>
+
+          <form id="contactForm" class="contact-form reveal" novalidate>
+            <div class="form-field">
+              <label for="nameInput">Name</label>
+              <input
+                type="text"
+                id="nameInput"
+                name="name"
+                autocomplete="name"
+                aria-describedby="nameError"
+              />
+              <span class="error-message" id="nameError" role="alert"></span>
+            </div>
+
+            <div class="form-field">
+              <label for="emailInput">Email</label>
+              <input
+                type="email"
+                id="emailInput"
+                name="email"
+                autocomplete="email"
+                aria-describedby="emailError"
+              />
+              <span class="error-message" id="emailError" role="alert"></span>
+            </div>
+
+            <div class="form-field">
+              <label for="messageInput">Message</label>
+              <textarea
+                id="messageInput"
+                name="message"
+                rows="5"
+                aria-describedby="messageError"
+              ></textarea>
+              <span class="error-message" id="messageError" role="alert"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              Send Message
+            </button>
+
+            <div class="form-success" id="formSuccess" role="status" hidden>
+              Message sent. Thanks for reaching out — I'll get back to you soon.
+            </div>
+          </form>
+        </div>
+      </section>
     </main>
-    <footer>
-      <!-- Status bar -->
+
+    <!-- Status bar -->
+    <footer class="site-footer">
+      <div class="container">
+        <p>
+          Designed &amp; built by Afia Jahin Rupali ·
+          <span id="footerYear"></span>
+        </p>
+        <p class="footer-note">
+          Every submission on this page runs on plain HTML, CSS, and JavaScript.
+          No frameworks were involved.
+        </p>
+      </div>
     </footer>
+
+    <button
+      id="backToTop"
+      class="back-to-top"
+      type="button"
+      aria-label="Back to top"
+    >
+      ↑
+    </button>
+
+    <!-- mirrors the top bar and reports the active section -->
+    <footer class="status-bar" id="statusBar">
+      <div class="status-left">
+        <span class="status-branch">⎇ main</span>
+        <span id="statusFile">viewing: hero.js</span>
+      </div>
+      <div class="status-right">
+        <span id="statusTheme">theme: light</span>
+        <span>UTF-8</span>
+        <span>LF</span>
+      </div>
+    </footer>
+
+    <!-- 
+    aria-live="polite" - screen readers are politely notified when a new message appears.
+    aria-atomic="true" - tells the screen reader to read the entire notification when it changes.
+    -->
+    <div
+      class="toast-container"
+      id="toastContainer"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <!-- js connection -->
     <script src="js/script.js"></script>
   </body>
 </html>
