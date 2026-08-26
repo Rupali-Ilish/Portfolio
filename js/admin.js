@@ -5,8 +5,8 @@
   var MESSAGES_KEY = "portfolioMessages";
   var AUTH_KEY = "adminLoggedIn";
 
-  var ADMIN_USERNAME = "admin";
-  var ADMIN_PASSWORD = "admin123";
+  //   var ADMIN_USERNAME = "admin";
+  //   var ADMIN_PASSWORD = "admin123";
 
   var currentStatusFilter = "all";
   var currentSearchTerm = "";
@@ -68,14 +68,39 @@
       var password = document.getElementById("passwordInput").value;
       var errorEl = document.getElementById("loginError");
 
-      if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-        errorEl.textContent = "";
-        sessionStorage.setItem(AUTH_KEY, "true");
-        form.reset();
-        showDashboard();
-      } else {
-        errorEl.textContent = "Incorrect username or password.";
-      }
+      fetch("/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            return {
+              ok: response.ok,
+              data: data,
+            };
+          });
+        })
+        .then(function (result) {
+          if (result.ok && result.data.success) {
+            errorEl.textContent = "";
+            sessionStorage.setItem(AUTH_KEY, "true");
+            form.reset();
+            showDashboard();
+          } else {
+            errorEl.textContent =
+              result.data.error || "Incorrect username or password.";
+          }
+        })
+        .catch(function (err) {
+          console.error("Login error:", err);
+          errorEl.textContent = "Could not connect to the server.";
+        });
     });
   }
 
@@ -89,23 +114,40 @@
   }
 
   //   msg storage
-  function getMessages() {
-    try {
-      var raw = localStorage.getItem(MESSAGES_KEY);
-      return raw ? JSON.parse(raw) : [];
-    } catch (err) {
-      console.error("Could not read stored messages:", err);
-      return [];
-    }
-  }
+  //   function getMessages() {
+  //     try {
+  //       var raw = localStorage.getItem(MESSAGES_KEY);
+  //       return raw ? JSON.parse(raw) : [];
+  //     } catch (err) {
+  //       console.error("Could not read stored messages:", err);
+  //       return [];
+  //     }
+  //   }
 
-  function setMessages(messages) {
+  //   function setMessages(messages) {
+  //     try {
+  //       localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
+  //       return true;
+  //     } catch (err) {
+  //       console.error("Could not save messages:", err);
+  //       return false;
+  //     }
+  //   }
+
+  //   msg storage
+  async function getMessages() {
     try {
-      localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
-      return true;
+      var response = await fetch("/api/messages");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch messages.");
+      }
+
+      return await response.json();
     } catch (err) {
-      console.error("Could not save messages:", err);
-      return false;
+      console.error("Could not read messages:", err);
+      showToast("Could not load messages.", "error");
+      return [];
     }
   }
 
@@ -123,16 +165,32 @@
   }
 
   //   filter and serach
-  function getFilteredMessages() {
+  //   function getFilteredMessages() {
+  //     var term = currentSearchTerm.trim().toLowerCase();
+
+  //     return getMessages().filter(function (msg) {
+  //       var matchesStatus =
+  //         currentStatusFilter === "all" || msg.status === currentStatusFilter;
+  //       var matchesSearch =
+  //         !term ||
+  //         msg.name.toLowerCase().indexOf(term) !== -1 ||
+  //         msg.email.toLowerCase().indexOf(term) !== -1;
+  //       return matchesStatus && matchesSearch;
+  //     });
+  //   }
+
+  function filterMessages(messages) {
     var term = currentSearchTerm.trim().toLowerCase();
 
-    return getMessages().filter(function (msg) {
+    return messages.filter(function (msg) {
       var matchesStatus =
         currentStatusFilter === "all" || msg.status === currentStatusFilter;
+
       var matchesSearch =
         !term ||
         msg.name.toLowerCase().indexOf(term) !== -1 ||
         msg.email.toLowerCase().indexOf(term) !== -1;
+
       return matchesStatus && matchesSearch;
     });
   }
@@ -142,7 +200,7 @@
     if (searchInput) {
       searchInput.addEventListener("input", function () {
         currentSearchTerm = searchInput.value;
-        renderMessages(getFilteredMessages());
+        refreshDashboard();
       });
     }
 
@@ -156,7 +214,7 @@
               b.classList.toggle("active", b === btn);
             });
           currentStatusFilter = btn.dataset.status;
-          renderMessages(getFilteredMessages());
+          refreshDashboard();
         });
       });
 
@@ -249,10 +307,10 @@
     return row;
   }
 
-  function refreshDashboard() {
-    var allMessages = getMessages();
+  async function refreshDashboard() {
+    var allMessages = await getMessages();
     updateMessageStats(allMessages);
-    renderMessages(getFilteredMessages());
+    renderMessages(filterMessages(allMessages));
   }
 
   //   msg read, set, delete
@@ -263,59 +321,183 @@
     setMessageStatus(id, "unread");
   }
 
-  function setMessageStatus(id, status) {
-    var messages = getMessages();
-    var msg = messages.find(function (m) {
-      return m.id === id;
-    });
-    if (!msg) return;
+  //   function setMessageStatus(id, status) {
+  //     var messages = getMessages();
+  //     var msg = messages.find(function (m) {
+  //       return m.id === id;
+  //     });
+  //     if (!msg) return;
 
-    msg.status = status;
-    setMessages(messages);
-    refreshDashboard();
-    showToast(
-      status === "read" ? "Marked as read." : "Marked as unread.",
-      "success",
-    );
+  //     msg.status = status;
+  //     setMessages(messages);
+  //     refreshDashboard();
+  //     showToast(
+  //       status === "read" ? "Marked as read." : "Marked as unread.",
+  //       "success",
+  //     );
 
-    var toggleBtn = document.getElementById("modalToggleRead");
-    if (toggleBtn && currentModalId === id) {
-      toggleBtn.textContent =
-        status === "unread" ? "Mark as Read" : "Mark as Unread";
+  //     var toggleBtn = document.getElementById("modalToggleRead");
+  //     if (toggleBtn && currentModalId === id) {
+  //       toggleBtn.textContent =
+  //         status === "unread" ? "Mark as Read" : "Mark as Unread";
+  //     }
+  //   }
+  async function setMessageStatus(id, status) {
+    try {
+      var response = await fetch("/api/messages", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+          status: status,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update message status.");
+      }
+
+      await refreshDashboard();
+
+      showToast(
+        status === "read" ? "Marked as read." : "Marked as unread.",
+        "success",
+      );
+
+      var toggleBtn = document.getElementById("modalToggleRead");
+
+      if (toggleBtn && currentModalId === id) {
+        toggleBtn.textContent =
+          status === "unread" ? "Mark as Read" : "Mark as Unread";
+      }
+    } catch (err) {
+      console.error("Could not update message:", err);
+      showToast("Could not update message.", "error");
     }
   }
 
-  function deleteMessage(id) {
-    var messages = getMessages().filter(function (m) {
-      return m.id !== id;
-    });
-    setMessages(messages);
-    refreshDashboard();
-    showToast("Message deleted.", "success");
-    if (currentModalId === id) closeModal();
+  //   function deleteMessage(id) {
+  //     var messages = getMessages().filter(function (m) {
+  //       return m.id !== id;
+  //     });
+  //     setMessages(messages);
+  //     refreshDashboard();
+  //     showToast("Message deleted.", "success");
+  //     if (currentModalId === id) closeModal();
+  //   }
+  async function deleteMessage(id) {
+    try {
+      var response = await fetch("/api/messages", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete message.");
+      }
+
+      await refreshDashboard();
+
+      showToast("Message deleted.", "success");
+
+      if (currentModalId === id) {
+        closeModal();
+      }
+    } catch (err) {
+      console.error("Could not delete message:", err);
+      showToast("Could not delete message.", "error");
+    }
   }
 
-  function deleteAllMessages() {
-    var messages = getMessages();
+  //   function deleteAllMessages() {
+  //     var messages = getMessages();
+  //     if (!messages.length) {
+  //       showToast("There are no messages to delete.", "error");
+  //       return;
+  //     }
+  //     var confirmed = window.confirm(
+  //       "Delete all " + messages.length + " message(s)? This cannot be undone.",
+  //     );
+  //     if (!confirmed) return;
+
+  //     setMessages([]);
+  //     refreshDashboard();
+  //     showToast("All messages deleted.", "success");
+  //   }
+
+  async function deleteAllMessages() {
+    var messages = await getMessages();
+
     if (!messages.length) {
       showToast("There are no messages to delete.", "error");
       return;
     }
+
     var confirmed = window.confirm(
       "Delete all " + messages.length + " message(s)? This cannot be undone.",
     );
+
     if (!confirmed) return;
 
-    setMessages([]);
-    refreshDashboard();
-    showToast("All messages deleted.", "success");
+    try {
+      var response = await fetch("/api/messages", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          all: true,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete all messages.");
+      }
+
+      await refreshDashboard();
+
+      showToast("All messages deleted.", "success");
+    } catch (err) {
+      console.error("Could not delete all messages:", err);
+      showToast("Could not delete all messages.", "error");
+    }
   }
 
   //   details
-  function openMessageModal(id) {
-    var msg = getMessages().find(function (m) {
+
+  //   function openMessageModal(id) {
+  //     var msg = getMessages().find(function (m) {
+  //       return m.id === id;
+  //     });
+  //     if (!msg) return;
+
+  //     currentModalId = id;
+
+  //     document.getElementById("modalDate").textContent = "// " + msg.date;
+  //     document.getElementById("modalName").textContent = msg.name;
+  //     document.getElementById("modalEmail").textContent = msg.email;
+  //     document.getElementById("modalMessage").textContent = msg.message;
+
+  //     var toggleBtn = document.getElementById("modalToggleRead");
+  //     toggleBtn.textContent =
+  //       msg.status === "unread" ? "Mark as Read" : "Mark as Unread";
+
+  //     document.getElementById("modalOverlay").hidden = false;
+  //   }
+  async function openMessageModal(id) {
+    var messages = await getMessages();
+
+    var msg = messages.find(function (m) {
       return m.id === id;
     });
+
     if (!msg) return;
 
     currentModalId = id;
@@ -326,6 +508,7 @@
     document.getElementById("modalMessage").textContent = msg.message;
 
     var toggleBtn = document.getElementById("modalToggleRead");
+
     toggleBtn.textContent =
       msg.status === "unread" ? "Mark as Read" : "Mark as Unread";
 
@@ -354,11 +537,15 @@
       if (e.key === "Escape" && !overlay.hidden) closeModal();
     });
 
-    toggleBtn.addEventListener("click", function () {
-      var msg = getMessages().find(function (m) {
+    toggleBtn.addEventListener("click", async function () {
+      var messages = await getMessages();
+
+      var msg = messages.find(function (m) {
         return m.id === currentModalId;
       });
+
       if (!msg) return;
+
       if (msg.status === "unread") {
         markAsRead(msg.id);
       } else {

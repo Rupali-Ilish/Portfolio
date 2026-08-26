@@ -9,7 +9,7 @@
     "Competitive Programmer",
     "Problem Solver",
     "Future Software Engineer",
-    "Business Owner"
+    "Business Owner",
   ];
 
   var SECTION_LABELS = {
@@ -412,17 +412,42 @@
     );
   }
 
-  function saveMessage(name, email, message) {
-    var messages = getMessages();
-    messages.unshift({
-      id: generateMessageId(),
-      name: name,
-      email: email,
-      message: message,
-      date: formatDateTime(new Date()),
-      status: "unread",
-    });
-    return setMessages(messages);
+  // function saveMessage(name, email, message) {
+  //   var messages = getMessages();
+  //   messages.unshift({
+  //     id: generateMessageId(),
+  //     name: name,
+  //     email: email,
+  //     message: message,
+  //     date: formatDateTime(new Date()),
+  //     status: "unread",
+  //   });
+  //   return setMessages(messages);
+  // }
+
+  async function saveMessage(name, email, message) {
+    try {
+      var response = await fetch("/api/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          message: message,
+        }),
+      });
+
+      if (!response.ok) {
+        return false;
+      }
+
+      return true;
+    } catch (err) {
+      console.error("Could not send message:", err);
+      return false;
+    }
   }
 
   // contact form
@@ -435,7 +460,7 @@
     var messageInput = document.getElementById("messageInput");
     var successBox = document.getElementById("formSuccess");
 
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", async function (e) {
       e.preventDefault();
       successBox.hidden = true;
 
@@ -464,7 +489,7 @@
         return;
       }
 
-      var saved = saveMessage(nameValue, emailValue, messageValue);
+      var saved = await saveMessage(nameValue, emailValue, messageValue);
       if (saved) {
         form.reset();
         successBox.hidden = false;
